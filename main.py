@@ -2,6 +2,7 @@ from urllib.request import urlretrieve
 from urllib.request import urlopen
 from mutagen.easyid3 import EasyID3
 import mutagen
+import sys
 import re
 import os
 
@@ -25,7 +26,8 @@ def main(url):
 			f.write(buffer)
 			status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
 			status = status + chr(8)*(len(status)+1)
-			print(status)
+			sys.stdout.write("\r" + status)
+			sys.stdout.flush()
 
 		f.close()
 		try:
@@ -37,6 +39,7 @@ def main(url):
 		meta['album'] = album
 		meta['artist'] = artist
 		meta.save()
+
 	print("Hold on, getting the relevant info...")
 	sock = urlretrieve(url)
 	ch = open(sock[0]).read()
@@ -46,10 +49,15 @@ def main(url):
 	artist = RE.findall(ch)
 	RE = re.compile("trackinfo : \[(.*?)\]", re.M)
 	matches = RE.findall(ch)
-	RE = re.compile('"title":"(.*?),"file')
-	titles = RE.findall(matches[0])
-	RE = re.compile('"file":{"mp3-128":"(.*?)"}')
-	songs = RE.findall(matches[0])
+	try:
+		RE = re.compile('"title":"(.*?),"file')
+		titles = RE.findall(matches[0])
+		RE = re.compile('"file":{"mp3-128":"(.*?)"}')
+		songs = RE.findall(matches[0])
+	except Exception as e:
+		print("I can't download individual tracks right now, only albums. This might get fixed in the futured :)")
+		print("You're welcome to try again, but this time with an actual album")
+		sys.exit()
 
 	directory = os.path.join(album[0])
 	if not os.path.exists(directory):
@@ -60,5 +68,5 @@ def main(url):
 	
 	
 if __name__ == '__main__':
-	url = input("Enter the url of track/album you wish to download: ")
+	url = input("Enter the url of album you wish to download: ")
 	main(url)

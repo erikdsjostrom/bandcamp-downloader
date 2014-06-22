@@ -1,6 +1,6 @@
 #Bandcamp Downloader
 A simple scripts that downloads albums and tracks from bandcamp, tested on python3.4
-It also adds some meta tags to mp3 so it fits into your library nicely
+It also adds some meta tags to the mp3 so it fits into your library nicely
 ##How to use
 * Run the script from the command line
 * Enter the url of the album or track you wish to download
@@ -9,6 +9,7 @@ It also adds some meta tags to mp3 so it fits into your library nicely
 ##ToDO
 * Add the album artwork
 * Figure out how to figure out the genre
+* Bug testing
 * <del>Add option to enter username instead of url</del>
 * <del>Fix so it can download individual songs</del>
 * <del>Progressbar</del>

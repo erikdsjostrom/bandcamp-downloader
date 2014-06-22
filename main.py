@@ -5,6 +5,7 @@ import mutagen
 import sys
 import re
 import os
+import copy
 
 def main(reply):
 	def f7(seq):
@@ -53,7 +54,7 @@ def main(reply):
 				download(songs[i], title, album_name[0], artist[0], track, user)
 
 	def simple_parse(url):
-		if not url[:6] == "http://":  # Failsafe
+		if not url[:7] == "http://":  # Failsafe
 			url = "http://" + url
 		try:
 			sock = urlretrieve(url)
@@ -65,21 +66,21 @@ def main(reply):
 		album_name = RE.findall(ch)
 		RE = re.compile('artist : "(.*?)",')
 		artist = RE.findall(ch)
-		RE = re.compile("trackinfo : \[(.*?)\]", re.M)
-		matches = RE.findall(ch)
+		if not album_name:
+			album_name = copy.deepcopy(artist)
+		# RE = re.compile("trackinfo : \[(.*?)\]", re.M)
+		# matches = RE.findall(ch)
 		RE = re.compile('"title":"(.*?)","')
 		titles = RE.findall(ch)
-		print(titles)
 		titles = f7(titles)  # Remove any stray duplicates, if any
-		print(titles)
 		RE = re.compile('"file":{"mp3-128":"(.*?)"}')
 		songs = RE.findall(ch)
 
-		directory = os.path.join(album[0])
+		directory = os.path.join(album_name[0])
 		if not os.path.exists(directory):
 			os.makedirs(directory)
 		for i in range(len(songs)):
-			title = titles[i].replace('"','')
+			title = titles[i].replace('"', '')
 			track = str(i + 1)
 			download(songs[i], title, album_name[0], artist[0], track)
 
@@ -129,9 +130,7 @@ def main(reply):
 		simple_parse(reply)
 	else:
 		parse_username(reply)
-	
-	
-	
+
 if __name__ == '__main__':
 	print("You have two options")
 	print("[1] Enter the full url to the album or track you wish to download")

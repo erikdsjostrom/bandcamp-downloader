@@ -7,22 +7,30 @@ import re
 import os
 import copy
 
+
 def main(reply):
 	def f7(seq):
 		seen = set()
 		seen_add = seen.add
-		return [ x for x in seq if x not in seen and not seen_add(x)]
+		return [x for x in seq if x not in seen and not seen_add(x)]
 
 	def parse_username(user):
 		url = "http://" + user + ".bandcamp.com"
 		try:
 			sock = urlretrieve(url)
-		except Exception as e:
+		except:
 			print("That's not a valid username, perhaps try with a full url instead")
 			sys.exit()
 		ch = open(sock[0]).read()
 		RE = re.compile('<span class="title">(.*?)</span>')
-		user = RE.findall(ch)[0]
+		try:
+			new_user = RE.findall(ch)[0]
+		except:
+			print("[!] That's not a valid username")
+			sys.exit()
+		finally:
+			if new_user:
+				user = new_user
 		RE = re.compile('/album/(.*?)">')
 		albums = RE.findall(ch)
 		for album in albums:
@@ -39,17 +47,16 @@ def main(reply):
 			matches = RE.findall(ch)
 			RE = re.compile('"title":"(.*?)","')
 			titles = RE.findall(ch)
-			print(titles)
 			titles = f7(titles)  # Remove stray duplicates, if any
-			print(titles)
 			RE = re.compile('"file":{"mp3-128":"(.*?)"}')
 			songs = RE.findall(ch)
-
+			print(user)
 			directory = os.path.join(user + "/" + album_name[0])
+			print(directory)
 			if not os.path.exists(directory):
 				os.makedirs(directory)
 			for i in range(len(songs)):
-				title = titles[i].replace('"','')
+				title = titles[i].replace('"', '')
 				track = str(i + 1)
 				download(songs[i], title, album_name[0], artist[0], track, user)
 
@@ -58,7 +65,7 @@ def main(reply):
 			url = "http://" + url
 		try:
 			sock = urlretrieve(url)
-		except Exception as e:
+		except:
 			print("That's not a valid url")
 			sys.exit()
 		ch = open(sock[0]).read()
@@ -70,7 +77,7 @@ def main(reply):
 			album_name = copy.deepcopy(artist)
 		# RE = re.compile("trackinfo : \[(.*?)\]", re.M)
 		# matches = RE.findall(ch)
-		RE = re.compile('"title":"(.*?)","')
+		RE = re.compile('"title":"(.*?),"file"')
 		titles = RE.findall(ch)
 		titles = f7(titles)  # Remove any stray duplicates, if any
 		RE = re.compile('"file":{"mp3-128":"(.*?)"}')
@@ -92,7 +99,7 @@ def main(reply):
 		u = urlopen(download_url)
 		try:
 			f = open(file_name, 'wb')
-		except Exception as e:
+		except:
 			print("file open Exception")
 			f = open(file_name, 'wb')
 		meta = u.info()
@@ -133,7 +140,8 @@ def main(reply):
 
 if __name__ == '__main__':
 	print("You have two options")
-	print("[1] Enter the full url to the album or track you wish to download")
-	print('[2] Enter the username of the artist, and I will try to download everything the artist has made available, ("username".bandcamp.com)')
+	print("Enter the full url to the album or track you wish to download")
+	print("Or")
+	print('Enter the username of the artist, and I will try to download everything the artist has made available, ("username".bandcamp.com)')
 	reply = input("You must choose, but choose wisely: ")
 	main(reply)

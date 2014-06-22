@@ -19,10 +19,11 @@ def main(reply):
 		try:
 			sock = urlretrieve(url)
 		except:
-			print("That's not a valid username, perhaps try with a full url instead")
+			print("[!] That's not a valid username, perhaps try with a full url instead")
 			sys.exit()
-		ch = open(sock[0]).read()
+		ch = open(sock[0], encoding="ISO-8859-1").read()
 		RE = re.compile('<span class="title">(.*?)</span>')
+		new_user = ''
 		try:
 			new_user = RE.findall(ch)[0]
 		except:
@@ -38,7 +39,7 @@ def main(reply):
 			print("="*42)
 			album_url = url + "/album/" + album
 			sock = urlretrieve(album_url)
-			ch = open(sock[0]).read()
+			ch = open(sock[0], encoding="ISO-8859-1").read()
 			RE = re.compile('album_title : "(.*?)",')
 			album_name = RE.findall(ch)
 			RE = re.compile('artist : "(.*?)",')
@@ -61,15 +62,22 @@ def main(reply):
 				download(songs[i], title, album_name[0], artist[0], track, user)
 
 	def simple_parse(url):
-		if not url[:7] == "http://":  # Failsafe
-			url = "http://" + url
+		# if not url[:7] == "http://":  # Failsafe, fails on https
+		# 	url = "http://" + url
 		try:
 			sock = urlretrieve(url)
 		except:
-			print("That's not a valid url")
+			print("[!] That's not a valid url")
+			print("Example: http://derp.bandcamp.com")
 			sys.exit()
-		ch = open(sock[0]).read()
+		ch = open(sock[0], encoding="ISO-8859-1").read()
 		RE = re.compile('album_title : "(.*?)",')
+		new_user = ''
+		try:
+			new_user = RE.findall(ch)[0]
+		except:
+			print("[!] That's not a valid username")
+			sys.exit()
 		album_name = RE.findall(ch)
 		RE = re.compile('artist : "(.*?)",')
 		artist = RE.findall(ch)
@@ -100,7 +108,6 @@ def main(reply):
 		try:
 			f = open(file_name, 'wb')
 		except:
-			print("file open Exception")
 			f = open(file_name, 'wb')
 		meta = u.info()
 		file_size = int(meta["Content-Length"])

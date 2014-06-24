@@ -7,6 +7,7 @@ It also adds some meta tags to the mp3 so it fits into your library nicely
 * Or you could enter a bandcamp username, and the script will try to download everything the artist has made available 
 
 ##ToDO
+* Download from custom url's
 * Figure out how to figure out the genre
 * Bug testing
 * <del>Add the album artwork</del>

@@ -2,9 +2,19 @@
 A simple scripts that downloads albums and tracks from bandcamp, tested on python3.4
 It also adds some meta tags to the mp3 so it fits into your library nicely
 ##How to use
-* Run the script from the command line
-* Enter the url of the album or track you wish to download
-* Or you could enter a bandcamp username, and the script will try to download everything the artist has made available 
+**Run the script from the command line**
+```shell
+python main.py
+```
+**Enter the url of the album or track you wish to download**
+```shell
+[?] You must choose, but choose wisely: http://blackjamesfranco.bandcamp.com/
+```
+**Or enter a bandcamp username, and the script will try to download everything the artist has made available**
+```shell
+[?] You must choose, but choose wisely: blackjamesfranco
+```
+**Sit and watch the progress bar while the script does it things and downloads the music**
 
 ##ToDO
 * Download from custom url's

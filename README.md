@@ -11,7 +11,6 @@ It also adds some meta tags to the mp3 so it fits into your library nicely
 * Figure out how to figure out the genre
 * Bug testing
 * <del>Add the album artwork</del>
-* There's more content to find
 * <del>Add option to enter username instead of url</del>
 * <del>Fix so it can download individual songs</del>
 * <del>Progressbar</del>

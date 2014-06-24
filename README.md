@@ -15,6 +15,18 @@ python main.py
 [?] You must choose, but choose wisely: blackjamesfranco
 ```
 **Sit and watch the progress bar while the script does it things and downloads the music**
+```shell
+[?] You must choose, but choose wisely: blackjamesfranco
+Hold on, getting the relevant info...
+Downloading Album: sun-house
+==========================================
+Downloading: Sun House (Bytes: 813347)
+Downloading: Naked by Choice (Bytes: 3687234)
+  770048  [20.88%]
+```
+
+##Support the artist
+If you like the music, **support the artist**
 
 ##ToDO
 * Download from custom url's
